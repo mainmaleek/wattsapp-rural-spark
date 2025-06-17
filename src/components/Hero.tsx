@@ -41,13 +41,13 @@ const Hero = () => {
                 Start Trading Energy
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button 
+{/*               <Button 
                 size="lg" 
                 variant="outline" 
                 className="border-green-200 text-green-700 hover:bg-green-50 px-8 py-3"
               >
                 Watch Demo
-              </Button>
+              </Button> */}
             </div>
 
             {/* Key Stats */}
