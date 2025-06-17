@@ -56,7 +56,7 @@ const Dashboard = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-            Mini-Grid Operator Dashboard
+            Mini-Grid/Off-grid Operator Dashboard
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Real-time insights and AI-powered analytics for optimal mini-grid management
