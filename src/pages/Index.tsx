@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import Dashboard from "@/components/Dashboard";
 import FacilityReadiness from "@/components/FacilityReadiness";
 import MaintenanceAlerts from "@/components/MaintenanceAlerts";
+import OpenSourceDocs from "@/components/OpenSourceDocs";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -14,6 +15,7 @@ const Index = () => {
         <Dashboard />
         <FacilityReadiness />
         <MaintenanceAlerts />
+        <OpenSourceDocs />
       </main>
       <Footer />
     </div>

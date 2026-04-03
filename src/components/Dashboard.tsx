@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,9 +11,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  BarChart,
-  Bar,
-  Cell
 } from "recharts";
 import {
   Activity,
@@ -25,13 +23,15 @@ import {
   CloudLightning,
   MapPin,
   Clock,
-  ArrowUpRight
+  ArrowUpRight,
+  Play,
+  Pause
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Dashboard = () => {
-  // Telemetry data simulation
-  const telemetryData = [
+  const [isLive, setIsLive] = useState(false);
+  const [telemetryData, setTelemetryData] = useState([
     { time: "00:00", solar: 0, load: 15, temp: 24, voltage: 52.1 },
     { time: "04:00", solar: 0, load: 12, temp: 22, voltage: 51.8 },
     { time: "08:00", solar: 45, load: 35, temp: 28, voltage: 52.4 },
@@ -39,7 +39,47 @@ const Dashboard = () => {
     { time: "16:00", solar: 120, load: 95, temp: 36, voltage: 53.2 },
     { time: "20:00", solar: 0, load: 45, temp: 30, voltage: 52.8 },
     { time: "00:00", solar: 0, load: 20, temp: 26, voltage: 52.3 }
-  ];
+  ]);
+
+  const [currentStats, setCurrentStats] = useState({
+    uptime: 99.8,
+    temp: 4.2,
+    health: 88,
+    solar: 2.4
+  });
+
+  // Live simulation loop
+  useEffect(() => {
+    let interval: any;
+    if (isLive) {
+      interval = setInterval(() => {
+        // Update charts with a "sliding" effect
+        setTelemetryData(prev => {
+          const newData = [...prev];
+          const last = newData[newData.length - 1];
+          const newTime = new Date();
+          const timeStr = `${newTime.getHours()}:${newTime.getMinutes()}:${newTime.getSeconds()}`;
+          
+          newData.shift();
+          newData.push({
+            ...last,
+            time: timeStr,
+            solar: Math.max(0, last.solar + (Math.random() * 20 - 10)),
+            load: Math.max(10, last.load + (Math.random() * 10 - 5))
+          });
+          return newData;
+        });
+
+        // Update random stats
+        setCurrentStats(prev => ({
+          ...prev,
+          temp: Number((prev.temp + (Math.random() * 0.2 - 0.1)).toFixed(1)),
+          solar: Number((prev.solar + (Math.random() * 0.1 - 0.05)).toFixed(1))
+        }));
+      }, 3000);
+    }
+    return () => clearInterval(interval);
+  }, [isLive]);
 
   const maintenanceData = [
     { name: "Unit A", status: 98, color: "var(--pb-emerald)" },
@@ -56,15 +96,14 @@ const Dashboard = () => {
 
   return (
     <section id="dashboard" className="py-24 bg-white relative">
-       {/* Section indicator */}
        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
        
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
           <div className="space-y-4">
             <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-primary/5 text-primary text-[10px] font-bold uppercase tracking-widest border border-primary/10">
-              <Activity className="h-3 w-3 pb-pulse-live" />
-              <span>Real-time Monitoring Active</span>
+              <Activity className={cn("h-3 w-3", isLive && "pb-pulse-live")} />
+              <span>{isLive ? "Live Telemetry Active" : "Static Historical View"}</span>
             </div>
             <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight">
               Facility Reliability Dashboard
@@ -75,9 +114,16 @@ const Dashboard = () => {
             </p>
           </div>
           <div className="flex space-x-4">
-            <Button variant="outline" className="rounded-xl px-6 py-6 h-auto text-sm font-semibold border-gray-200">
-              <History className="mr-2 h-4 w-4" />
-              History
+            <Button 
+              variant="outline" 
+              onClick={() => setIsLive(!isLive)}
+              className={cn(
+                "rounded-xl px-6 py-6 h-auto text-sm font-semibold border-gray-200 transition-all",
+                isLive ? "bg-emerald-50 border-emerald-200 text-emerald-700" : "hover:bg-gray-50"
+              )}
+            >
+              {isLive ? <Pause className="mr-2 h-4 w-4" /> : <Play className="mr-2 h-4 w-4" />}
+              {isLive ? "Stop Live Stream" : "Start Live Stream"}
             </Button>
             <Button className="bg-primary hover:bg-primary/90 text-white rounded-xl px-8 py-6 h-auto text-sm font-bold pb-glow-teal">
               Generate Readiness Report
@@ -98,7 +144,7 @@ const Dashboard = () => {
                 </Badge>
               </div>
               <div>
-                <p className="text-3xl font-extrabold text-gray-900">99.8%</p>
+                <p className="text-3xl font-extrabold text-gray-900">{currentStats.uptime}%</p>
                 <div className="flex items-center justify-between mt-1.5">
                   <p className="text-sm font-semibold text-gray-500 uppercase tracking-widest">Average Uptime</p>
                   <ArrowUpRight className="h-4 w-4 text-emerald-500" />
@@ -113,12 +159,15 @@ const Dashboard = () => {
                 <div className="bg-blue-100 p-4 rounded-2xl group-hover:scale-110 transition-transform duration-300">
                   <ThermometerSnowflake className="h-7 w-7 text-blue-600" />
                 </div>
-                <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100 border-none px-3 py-1">
-                  Reliable
+                <Badge className={cn(
+                  "border-none px-3 py-1",
+                  currentStats.temp > 8 ? "bg-rose-100 text-rose-700" : "bg-blue-100 text-blue-700"
+                )}>
+                  {currentStats.temp > 8 ? "Risk" : "Reliable"}
                 </Badge>
               </div>
               <div>
-                <p className="text-3xl font-extrabold text-gray-900">4.2°C</p>
+                <p className="text-3xl font-extrabold text-gray-900 transition-all duration-500">{currentStats.temp}°C</p>
                 <div className="flex items-center justify-between mt-1.5">
                   <p className="text-sm font-semibold text-gray-500 uppercase tracking-widest">Cold Chain Temp</p>
                   <ArrowUpRight className="h-4 w-4 text-blue-500" />
@@ -138,7 +187,7 @@ const Dashboard = () => {
                 </Badge>
               </div>
               <div>
-                <p className="text-3xl font-extrabold text-gray-900">88%</p>
+                <p className="text-3xl font-extrabold text-gray-900">{currentStats.health}%</p>
                 <div className="flex items-center justify-between mt-1.5">
                   <p className="text-sm font-semibold text-gray-500 uppercase tracking-widest">Avg. Battery Health</p>
                   <ArrowUpRight className="h-4 w-4 text-amber-500" />
@@ -151,14 +200,14 @@ const Dashboard = () => {
             <div className="flex flex-col h-full justify-between space-y-8">
               <div className="flex items-center justify-between">
                 <div className="bg-primary/10 p-4 rounded-2xl group-hover:scale-110 transition-transform duration-300">
-                  <Sun className="h-7 w-7 text-primary" />
+                  <Sun className={cn("h-7 w-7 text-primary", isLive && "animate-spin-slow")} />
                 </div>
                 <Badge className="bg-primary/10 text-primary hover:bg-primary/10 border-none px-3 py-1">
                   Active
                 </Badge>
               </div>
               <div>
-                <p className="text-3xl font-extrabold text-gray-900">2.4<span className="text-lg">kW</span></p>
+                <p className="text-3xl font-extrabold text-gray-900">{currentStats.solar}<span className="text-lg">kW</span></p>
                 <div className="flex items-center justify-between mt-1.5">
                   <p className="text-sm font-semibold text-gray-500 uppercase tracking-widest">Curr. Solar Yield</p>
                   <ArrowUpRight className="h-4 w-4 text-primary" />
@@ -170,7 +219,6 @@ const Dashboard = () => {
 
         {/* Analytics Section */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Main Chart Column */}
           <div className="lg:col-span-8 space-y-8">
             <Card className="p-8 rounded-[2.5rem] bg-white border-gray-100/100 shadow-2xl shadow-gray-100">
               <div className="flex items-center justify-between mb-10">
@@ -214,7 +262,6 @@ const Dashboard = () => {
                       axisLine={false} 
                       tickLine={false} 
                       tick={{fill: '#94a3b8', fontSize: 11}} 
-                      label={{ value: 'Watts', angle: -90, position: 'insideLeft', style: {textAnchor: 'middle', fill: '#94a3b8', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px'} }}
                     />
                     <Tooltip 
                       contentStyle={{borderRadius: '16px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.05)'}} 
@@ -227,6 +274,7 @@ const Dashboard = () => {
                       fillOpacity={1} 
                       fill="url(#colorSolar)" 
                       stackId="1"
+                      isAnimationActive={!isLive}
                     />
                     <Area 
                       type="monotone" 
@@ -237,6 +285,7 @@ const Dashboard = () => {
                       fillOpacity={1} 
                       fill="url(#colorLoad)" 
                       stackId="0"
+                      isAnimationActive={!isLive}
                     />
                   </AreaChart>
                 </ResponsiveContainer>
@@ -291,7 +340,6 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Side Alerts Column */}
           <div className="lg:col-span-4 space-y-6">
             <Card className="p-8 rounded-[2.5rem] bg-slate-50 border-none h-fit">
                <div className="flex items-center justify-between mb-8">
@@ -319,11 +367,6 @@ const Dashboard = () => {
                       )}>
                         {alert.text}
                       </p>
-                      <div className="pt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                         <Button variant="link" className="p-0 h-auto text-primary text-xs font-bold uppercase tracking-wider">
-                           Execute Countermeasure <ArrowUpRight className="ml-1 h-3 w-3" />
-                         </Button>
-                      </div>
                    </div>
                  ))}
                </div>
@@ -332,7 +375,7 @@ const Dashboard = () => {
                   <div className="relative z-10">
                     <h4 className="font-bold text-lg mb-2">Technician Protocol</h4>
                     <p className="text-primary-foreground/80 text-xs leading-relaxed mb-6">
-                      Seasonal grid failures expected. Ensure all backup diesel reserves are verified at Tier 1 facilities.
+                       Seasonal grid failures expected. Ensure all backup diesel reserves are verified.
                     </p>
                     <Button size="sm" className="bg-white text-primary hover:bg-white/90 rounded-xl font-bold text-[10px] uppercase px-4 h-9">
                       Send Mass Alert
@@ -349,7 +392,6 @@ const Dashboard = () => {
                </h3>
                <p className="text-accent-foreground/80 text-sm mb-6 leading-relaxed font-medium">
                  Heat index in Sokoto region is 15% above seasonal norm. 
-                 Clinic B battery cooling intake efficiency is decoupled by 4%.
                </p>
                <div className="p-4 bg-white/10 rounded-2xl border border-white/10 flex items-center justify-between">
                   <div>
