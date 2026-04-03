@@ -2,85 +2,91 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
+/* Powerbox Design System — Healthcare Energy Monitoring Platform */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 160 10% 98%;
+    --foreground: 180 25% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 180 25% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 180 25% 8%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 173 58% 26%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 160 15% 93%;
+    --secondary-foreground: 180 25% 8%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 160 10% 95%;
+    --muted-foreground: 180 8% 46%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 37 91% 55%;
+    --accent-foreground: 37 91% 12%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 160 15% 90%;
+    --input: 160 15% 90%;
+    --ring: 173 58% 26%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Powerbox custom tokens */
+    --pb-teal: 173 58% 26%;
+    --pb-emerald: 160 84% 39%;
+    --pb-amber: 37 91% 55%;
+    --pb-blue: 217 91% 60%;
+    --pb-rose: 347 77% 50%;
+    --pb-slate: 215 16% 47%;
+    --pb-success: 160 84% 39%;
+    --pb-warning: 37 91% 55%;
+    --pb-danger: 347 77% 50%;
+    --pb-info: 217 91% 60%;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 180 15% 6%;
+    --foreground: 160 10% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 180 15% 9%;
+    --card-foreground: 160 10% 95%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 180 15% 9%;
+    --popover-foreground: 160 10% 95%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 173 58% 39%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 180 12% 15%;
+    --secondary-foreground: 160 10% 95%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 180 12% 15%;
+    --muted-foreground: 160 8% 55%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 37 91% 55%;
+    --accent-foreground: 37 91% 95%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 180 12% 18%;
+    --input: 180 12% 18%;
+    --ring: 173 58% 39%;
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -99,5 +105,161 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.025em;
+  }
+
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+}
+
+/* Powerbox utility classes */
+@layer components {
+  .pb-glow-teal {
+    box-shadow: 0 0 20px rgba(15, 118, 110, 0.15), 0 0 60px rgba(15, 118, 110, 0.05);
+  }
+
+  .pb-glow-amber {
+    box-shadow: 0 0 20px rgba(217, 119, 6, 0.15), 0 0 60px rgba(217, 119, 6, 0.05);
+  }
+
+  .pb-glow-rose {
+    box-shadow: 0 0 20px rgba(225, 29, 72, 0.15), 0 0 60px rgba(225, 29, 72, 0.05);
+  }
+
+  .pb-gradient-hero {
+    background: linear-gradient(135deg,
+      hsl(180, 20%, 4%) 0%,
+      hsl(173, 30%, 8%) 30%,
+      hsl(180, 20%, 6%) 60%,
+      hsl(217, 25%, 8%) 100%
+    );
+  }
+
+  .pb-gradient-teal {
+    background: linear-gradient(135deg, hsl(173, 58%, 26%), hsl(160, 84%, 39%));
+  }
+
+  .pb-gradient-amber {
+    background: linear-gradient(135deg, hsl(37, 91%, 55%), hsl(28, 80%, 52%));
+  }
+
+  .pb-gradient-data {
+    background: linear-gradient(180deg,
+      rgba(15, 118, 110, 0.03) 0%,
+      rgba(5, 150, 105, 0.01) 100%
+    );
+  }
+
+  .pb-glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .pb-glass-dark {
+    background: rgba(15, 30, 28, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .pb-pulse-live {
+    animation: pb-live-pulse 2s ease-in-out infinite;
+  }
+
+  .pb-float {
+    animation: pb-float 6s ease-in-out infinite;
+  }
+
+  .pb-shimmer {
+    background: linear-gradient(
+      110deg,
+      transparent 25%,
+      rgba(255, 255, 255, 0.05) 37%,
+      transparent 63%
+    );
+    background-size: 200% 100%;
+    animation: pb-shimmer 2.5s ease-in-out infinite;
+  }
+}
+
+@keyframes pb-live-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes pb-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pb-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes pb-fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pb-slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pb-scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.pb-animate-in {
+  animation: pb-fade-in 0.5s ease-out forwards;
+}
+
+.pb-animate-slide-up {
+  animation: pb-slide-up 0.6s ease-out forwards;
+}
+
+.pb-animate-scale-in {
+  animation: pb-scale-in 0.4s ease-out forwards;
+}
+
+/* Recharts customization */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: hsl(160, 15%, 90%);
+  stroke-opacity: 0.5;
+}
+
+.recharts-text {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 11px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(160, 10%, 95%);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(160, 15%, 78%);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(173, 58%, 26%);
 }

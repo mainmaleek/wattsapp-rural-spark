@@ -1,19 +1,20 @@
-
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Dashboard from "@/components/Dashboard";
-import EnergyCredit from "@/components/EnergyCredit";
-import P2PTrading from "@/components/P2PTrading";
+import FacilityReadiness from "@/components/FacilityReadiness";
+import MaintenanceAlerts from "@/components/MaintenanceAlerts";
 import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-slate-50 selection:bg-primary/20 selection:text-primary overflow-x-hidden">
       <Header />
-      <Hero />
-      <Dashboard />
-      <P2PTrading />
-      <EnergyCredit />
+      <main>
+        <Hero />
+        <Dashboard />
+        <FacilityReadiness />
+        <MaintenanceAlerts />
+      </main>
       <Footer />
     </div>
   );
